@@ -4,6 +4,7 @@ import MoSpec "mo:mospec/MoSpec";
 
 import Main "main";
 import Type "Types";
+import Principal "mo:base/Principal";
 
 let day3Actor = await Main.StudentWall();
 
@@ -56,7 +57,7 @@ let success = run([
       it(
         "should update message based on an Id",
         do {
-          let newContent : Type.Content = #Text("Test2");
+          let newContent : Type.Content = #Video("\00\00\00\ff");
           let response = await day3Actor.updateMessage(0, newContent);
           switch (response) {
             case (#ok) {

@@ -23,6 +23,18 @@ let homeworkTest : Type.Homework = {
   dueDate = Time.now();
   completed = false;
 };
+let homeworkTest2 : Type.Homework = {
+  title = "Test2";
+  description = "Test";
+  dueDate = Time.now();
+  completed = false;
+};
+let homeworkTest3 : Type.Homework = {
+  title = "Test3";
+  description = "aaa";
+  dueDate = Time.now();
+  completed = true;
+};
 
 let success = run([
   describe(
@@ -54,6 +66,20 @@ let success = run([
           };
         },
       ),
+      it(
+        "should get an error when the homework is not found",
+        do {
+          let response = await day2Actor.getHomework(1);
+          switch (response) {
+            case (#err(message)) {
+              assertTrue(message == "Homework not found: 1");
+            };
+            case (_) {
+              Debug.trap("Not get an error");
+            };
+          };
+        },
+      ),
     ],
   ),
   describe(
@@ -62,17 +88,25 @@ let success = run([
       it(
         "should update an existent Homework",
         do {
-          let homeworkTest2 : Type.Homework = {
-            title = "Test2";
-            description = "Test";
-            dueDate = Time.now();
-            completed = false;
-          };
 
           let response = await day2Actor.updateHomework(0, homeworkTest2);
           switch (response) {
-            case (#ok(homework)) {
+            case (#ok) {
               true;
+            };
+            case (#err(message)) {
+              Debug.trap(message);
+            };
+          };
+        },
+      ),
+      it(
+        "should update an existent Homework and check contents",
+        do {
+          let response = await day2Actor.getHomework(0);
+          switch (response) {
+            case (#ok(homework)) {
+              assertTrue(homework.title == "Test2");
             };
             case (#err(message)) {
               Debug.trap("Homework not found");
@@ -99,6 +133,20 @@ let success = run([
           };
         },
       ),
+      it(
+        "should mark as complete an existent Homework and check contents",
+        do {
+          let response = await day2Actor.getHomework(0);
+          switch (response) {
+            case (#ok(homework)) {
+              assertTrue(homework.completed == true);
+            };
+            case (#err(message)) {
+              Debug.trap("Homework not found");
+            };
+          };
+        },
+      ),
     ],
   ),
   describe(
@@ -113,7 +161,21 @@ let success = run([
               true;
             };
             case (#err(message)) {
-              Debug.trap("Homework not found");
+              Debug.trap(message);
+            };
+          };
+        },
+      ),
+      it(
+        "should delete an existent Homework and check",
+        do {
+          let response = await day2Actor.getHomework(0);
+          switch (response) {
+            case (#err(message)) {
+              assertTrue(message == "Homework not found: 0");
+            };
+            case (_) {
+              Debug.trap("Not get an error");
             };
           };
         },
@@ -126,9 +188,11 @@ let success = run([
       it(
         "should get all Homeworks",
         do {
+
           ignore await day2Actor.addHomework(homeworkTest);
+          ignore await day2Actor.addHomework(homeworkTest3);
           let response = await day2Actor.getAllHomework();
-          assertTrue(response.size() == 1);
+          assertTrue(response.size() == 2);
         },
       ),
     ],
@@ -139,7 +203,6 @@ let success = run([
       it(
         "should get Homework not completed",
         do {
-          ignore await day2Actor.addHomework(homeworkTest);
           let response = await day2Actor.getPendingHomework();
           assertTrue(response.size() == 1);
         },
@@ -150,10 +213,17 @@ let success = run([
     "#searchHomework",
     [
       it(
-        "should return first match of term with title or description",
+        "should return first match of term with title",
         do {
-          let response = await day2Actor.searchHomework("Test");
-          assertTrue(response[0].title == "Test");
+          let response = await day2Actor.searchHomework("t3");
+          assertTrue(response[0].title == "Test3");
+        },
+      ),
+      it(
+        "should return first match of term with description",
+        do {
+          let response = await day2Actor.searchHomework("aa");
+          assertTrue(response[0].title == "Test3");
         },
       ),
     ],

@@ -7,6 +7,7 @@
     "Motoko",
     "Canister"
   ],
+  "license": "MIT",
   "scripts": {
     "deploy:local": "dfx deploy --network=local",
     "deploy:ic": "dfx deploy --network=ic",
@@ -22,9 +23,6 @@
     "mo-dev": "^0.7.1",
     "prettier": "^2.8.1",
     "prettier-plugin-motoko": "^0.5.2"
-  },
-  "engines": {
-    "node": "^12 || ^14 || ^16 || ^18"
   },
   "dependencies": {
     "ic-mops": "^0.12.1"
