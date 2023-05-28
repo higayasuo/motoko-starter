@@ -1,5 +1,5 @@
 {
-  "name": "motoko-starter-template",
+  "name": "day6",
   "version": "0.2.0",
   "description": "Motoko Starter Template",
   "keywords": [
@@ -17,6 +17,7 @@
     "test:day3": "mo-test -C src/day3 --testmode interpreter --verbose",
     "test:day4": "mo-test -C src/day4 --testmode interpreter --verbose",
     "test:day5": "mo-test -C src/day5 --testmode interpreter --verbose",
+    "test:callertest": "mo-test -C src/callertest --testmode interpreter --verbose",
     "prettier": "npx prettier --write ."
   },
   "devDependencies": {
@@ -26,5 +27,8 @@
   },
   "dependencies": {
     "ic-mops": "^0.12.1"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/higayasuo/motoko-starter",
+  "author": "Yasuo Higa <higayasuo@gmail.com>"
 }
